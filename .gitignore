@@ -1,0 +1,44 @@
+# Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtualenv
+venv/
+.env/
+.venv/
+
+# Editor/IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de log e banco de dados temporário
+*.log
+*.sqlite3
+*.db
+
+# Testes
+.coverage
+htmlcov/
+.tox/
+pytest_cache/
+.pytest_cache/
+
+# Cache de pacotes
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Arquivos de build/distribuição
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Arquivos de ngrok temporários (se estiver usando ngrok no Colab/local)
+*.ngrok.*
