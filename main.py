@@ -4,6 +4,10 @@ from controllers.productController import productRouter
 app = FastAPI()
 
 # Teste
+@app.get('/')
+def read_root():
+    return {"route_products": "/api/products"}
+
 @app.get('/api')
 def read_root():
     return {"status": "API running"}

@@ -1,0 +1,51 @@
+name: Check API Docker
+
+on: # If there are updates on main or a pr to main this action will be executed
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  docker-api-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build Docker Image
+        run: |
+          docker build -t test-api:latest .
+      - name: Run Docker container
+        run: |
+          docker run -d --name test-api -p 8000:8000 test-api:latest
+
+      - name: Waint for API to start
+        run: sleep 5
+
+      - name: Test Health Endpoint
+        run: |
+          STATUS_CODE=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost:8000/api)
+          if [ $STATUS_CODE -ne 200 ]; then
+            echo "API health check failed with status code $STATUS_CODE"
+            exit 1
+          fi
+          echo "API is running"
+
+      - name: Test Products Endpoint
+        run: |
+          STATUS_CODE=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost:8000/api/products)
+          if [ $STATUS_CODE -ne 200 ]; then
+            echo "Products endpoint check failed with status code $STATUS_CODE"
+            exit 1
+          fi
+          echo "Products endpoint is running"
+
+      - name: Stop and remove container
+        run: |
+          docker stop test-api
+          docker rm test-api
